@@ -1,6 +1,6 @@
-Airbnb.df <- read.csv("Airbnb NYC 2019.csv", header = TRUE) # load data. Initially, create a New File, R script, save the file as the name 
-          of your csv with extension (.r) in an accessible location, save the original csv file in the same accessible location with the same 
-          name. In Session from R, Set Working Directory to Source File Location
+# Initially, in R, create a New File, select R script, save the file as the name of your csv with extension (.r) in an accessible location, save the original csv file in the same accessible location with the same 
+name. # In Session from R, Set Working Directory to Source File Location
+Airbnb.df <- read.csv("Airbnb NYC 2019.csv", header = TRUE) # load data. 
 dim(Airbnb.df) # find number of obs and variables
 head(Airbnb.df) #first 6 rows
 Airbnb.df[1:10,1] #first 10 rows in 1st column
