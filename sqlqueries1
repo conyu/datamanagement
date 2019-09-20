@@ -1,0 +1,14 @@
+#To start create a new script in R. Select File, New File, Script. Then name and save your file. Your all set. Commands below
+
+install.packages("sqldf")
+library(sqldf)
+library(DBI)
+mydb <- dbConnect(RSQLite::SQLite(), "") #create a new temporary database. 
+dbWriteTable(mydb,"airbnb", Airbnb.df) #add a new table into the database you created. #In my example, I already had airbnb.df data frame loaded in another window in R. 
+dbListTables(mydb) #List the table you created which confirms your airbnb table is created in the database
+dbGetQuery(mydb, 'SELECT * FROM airbnb LIMIT 5') #select a sample
+p2 = dbGetQuery( mydb, 'select * from airbnb' ) #select all observations and variables in airbnb and display it as a dataframe on the right hand side
+dbGetQuery(mydb,"SELECT room_type, AVG(price) AS 'average_price', AVG(minimum_nights) AS 'average_min_nights' FROM  airbnb
+                 GROUP BY room_type
+                 ORDER BY average_price") #Get the average price and average minimum nights from airbnb data and group it only by room-type (in the first column) and average_price in ascending order (from low to high) 
+                 
