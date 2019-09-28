@@ -1,0 +1,15 @@
+install.packages("tidyverse") #first install package for ggplot graphs. #tidyverse includes ggplot which is for graphing in R - in addition to other functions. #Once you install a package, you dont have to install it again. 
+library(tidyverse) #each time you need to run graphs, you must enter this command otherwise ggplot will not work
+ubernlyft.df <- read.csv("Uber and Lyft Data.csv", header = TRUE) #next step after 1 and 2, make sure the data set is recognized in R by pulling up the csv or whatever format your data is in. #In this case my dataframe is ubernlyft. 
+ggplot(data = ubernlyft.df) +
+  geom_point(mapping = aes(x = name, y = price)) #this is a scatterplot to map the relationship b/w two variables, geom point (command for scatter plot) calls a plot mapping x axis (independent variable) as name and y axis (dependent variable) as price. aes is short in R for aesthetics.
+ggplot(data = ubernlyft.df) + 
+  geom_bar(mapping = aes(x = name)) #this is a bar chart. geom_bar is mapping name in the x axis. #There is no y axis indicated - which means the graph defaults y to count. #We want to know the count for each name category.
+ggplot(data = uberlyft.df) + 
+  geom_bar(mapping = aes(x = cab_type, fill = name), position = "fill") #bar chart showing count by cab_type and categorization by name. #use fill (color) to indicate each 'name' category by cab_type. 
+ggplot(data = ubernlyft.df) + 
+  geom_point(mapping = aes(x = distance, y = price, color = cab_type)) #scatter plot showing relationship between distance and price. #it uses color to categorize by a third variable - cab_type.
+ggplot(data = ubernlyft.df) + 
+  geom_point(mapping = aes(x = distance, y = price)) + 
+  facet_wrap(~ name, nrow = 2) #scatter plot showing relationship between distance and price. #It introduces a third variable (name) for categorization. the facet wrap is used to split the data into rows by 'name' categories with distance and price in x and y columns.  
+cor.test(ubernlyft.df$price, ubernlyft.df$distance) #formula for pearson correlation which shows a number between - 1 and 1. 
