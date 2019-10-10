@@ -1,0 +1,41 @@
+ggplot(data = ubernlyft1.df, aes(x = distance, y = price)) + 
+  geom_point(color='blue') +
+  geom_smooth(method = "lm", se = FALSE) #plot price with distance and display line of best fit 
+  
+par(mfrow=c(1, 2))  # divide graph area in 2 columns
+boxplot(ubernlyft1.df$distance, main="Dist", sub=paste("count: ", boxplot.stats(ubernlyft1.df$distance)$out))  # box plot for 'distance which counts the outliers (referenced as 'out' in R)'
+boxplot(ubernlyft1.df$price, main="Price", sub=paste("count: ", boxplot.stats(ubernlyft1.df$price)$out))  # box plot for 'price’ which counts and displays the outliers
+
+boxplot(ubernlyft1.df$price, plot = FALSE)$out #Display all outliers for price in the R console (lower left screen)
+outliers <-boxplot(ubernlyft1.df$price, ubernlyft1.df$distance, plot = FALSE)$out #create "Outliers" as a new Value and display it on my screen on the right in the Values section in R Studio
+print(outliers) #Print all the values in "Outliers in the console (bottom left screen)
+
+ubernlyft1.df[which(ubernlyft1.df$price %in% outliers),] #identify which values are in the newly created Value - outliers - for price
+ubernlyft1.df[which(ubernlyft1.df$distance %in% outliers),] #identify which values are in the newly created Value - outliers - for distance
+
+ubernlyft2<-ubernlyft1.df[-which(ubernlyft1.df$price %in% outliers),] # Create a new dataframe and delete those price values in outlier Value.  
+boxplot(ubernlyft2$price) #boxplot new price data without outliers
+
+ubernlyft2<-ubernlyft1.df[-which(ubernlyft1.df$distance %in% outliers),] # Use the same new dataframe as in price and delete those distance values in outlier Value. You should have 684409 obs once deleted.
+boxplot(ubernlyft2$distance)#boxplot new distance data without outliers
+
+missingdatadrop1<-ubernlyft2%>%
+  na.omit()
+  dim(missingdatadrop1) #Create a new data frame and drop all NAs (missing data) in this dataset. After deletion show the data dimension of your new dataset. You should have 630356 obs, 10 variables.
+  
+  
+median_misprice<-median(missingdatadrop1$price) #Get the median of the new data set above. Make sure to calculate AND set it as a Value in R 
+mean_missprice<-mean(missingdatadrop1$price) #Get the mean of the new data set above. Make sure to calculate AND set it as a Value in R
+
+mutate_data<-ubernlyft2%>%
+  mutate(new_price = ifelse(is.na(price), median_missprice, price)) #create a new data frame from the data set (before the NAs drop). Create a new variable called new_price. Replace/set all missing NAs in the original data set to the median Value we calculate in the datadrop file (which is 13.5)
+  
+sum(is.na(mutate_data$new_price)) #Check to make sure there are no NAs in the new data frame. 
+dim(mutate_data) #Show the data dimension, you should have 6884409 obs and 11 variables (new_price added) which makes sense because that's the number of observations in ubernlyft2 dataframe.
+
+library(e1071) #load this library, a graphics library for density plots to check distribution 
+par(mfrow=c(1, 2))  # divide graph area in 2 columns
+plot(density(mutate_data$distance), main="Density Plot: Dist", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(mutate_data$distance), 2)))  # density plot for 'dist'and display in red color showing skew
+polygon(density(mutate_data$distance), col="red")
+plot(density(mutate_data$new_price), main="Density Plot: Price", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(mutate_data$new_price), 2)))  # density plot for 'price'and display in red color showing skew
+polygon(density(mutate_data$new_price), col="red")  
