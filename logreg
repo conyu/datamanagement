@@ -1,0 +1,13 @@
+bandat<-read.csv("bankdat.csv") #load data with 14 variables
+bandat2<-bandat[,-c(1,5)] #drop unnecessary columns such as id and zipcode and create new dataframe with 12 variables
+bandat2$Education<-factor(bandat2$Education,levels = c(1,2,3),
+                          labels = c("Undergrad", "Graduate", "Advanced/Professional")) #change from integer to character/dummy to avoid collinearity issue with variables such as income. Create three dummy characters and label them
+
+set.seed(2)
+train.index<-sample(c(1:dim(bandat2)[1]), dim(bandat2)[1]*0.6) # create value for training data called train index which captures 60% of the observations
+train.df<-bandat2[train.index, ] #data frame for the training data 
+valid.df<-bandat2[-train.index, ] #delete the training data values which gives you validation data and data frame
+
+logit.reg<-glm(Personal.Loan~.,data = train.df, family = "binomial") #run logistic regression on acceptance of Personal Loan.
+options(scipen = 999) #get rid of scientific notation numbers
+summary(logit.reg) # Get summary of Logistic regression 
