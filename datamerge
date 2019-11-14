@@ -1,0 +1,12 @@
+df1<-read.csv("telecoms churn data.csv", header = TRUE)
+df2<-read.csv("telecoms customer data.csv", header = TRUE)
+library(tidyverse) #for data transformation 
+df4<-dplyr::bind_cols(df1, df2) #merge dataset
+df5<-df4[,-c(10)] #drop duplicative column
+
+library(plyr) #library for data transformation tasks such as revalues
+library(dplyr) #Re run this library just in case
+
+df5$Churn <- revalue(df5$Churn, c("Yes"=1)) #change value from Yes to 1
+df5$Churn <- revalue(df5$Churn, c("No"=0)) #change value from No to 0 
+head(df5$Churn) #make sure revalue works
